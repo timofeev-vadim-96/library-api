@@ -18,7 +18,6 @@ public interface IssueService {
 
 
     List<IssueEntity> getReaderIssues(long readerId);
-    public List<BookEntity> getReaderBooks(long readerId);
 
     IssueEntity closeIssue(long issueId);
     public List<IssueEntity> findAllByIssueAtBetween(LocalDateTime inputFrom, LocalDateTime inputTo);

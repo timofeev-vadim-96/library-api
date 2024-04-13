@@ -30,4 +30,15 @@ public class ReaderEntity {
         this.email = email;
         this.birthDay = birthDay;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        ReaderEntity reader = (ReaderEntity) obj;
+        return reader.id == this.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) id;
+    }
 }

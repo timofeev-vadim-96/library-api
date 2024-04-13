@@ -1,6 +1,7 @@
 package com.example.restapi.controllers.uiControllers;
 
 import com.example.restapi.models.appEntities.BookEntity;
+import com.example.restapi.models.appEntities.IssueEntity;
 import com.example.restapi.models.appEntities.ReaderEntity;
 import com.example.restapi.services.issue.IssueService;
 import com.example.restapi.services.reader.ReaderService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/ui/reader")
@@ -38,7 +40,9 @@ public class ReaderUIController {
         if (reader == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Не удалось найти пользователя с id=" + id);
         }
-        List<BookEntity> books = issueService.getReaderBooks(id);
+        List<BookEntity> books = issueService.getReaderIssues(id).stream()
+                .map(IssueEntity::getBook)
+                .collect(Collectors.toList());
         model.addAttribute("reader", reader);
         model.addAttribute("books", books);
         return "readerBooks";

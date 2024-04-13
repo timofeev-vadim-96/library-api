@@ -39,7 +39,7 @@ public class ReaderController {
     }
 
     @Operation(summary = "add new reader", description = "Добавляет нового читателя")
-    @ApiResponse(responseCode = "200", description = "OK")
+    @ApiResponse(responseCode = "201", description = "CREATED")
     @PostMapping
     public ResponseEntity<ReaderEntity> add(@RequestBody ReaderEntity inputReaderEntity) {
         ReaderEntity returnedReaderEntity = readerService.save(inputReaderEntity);

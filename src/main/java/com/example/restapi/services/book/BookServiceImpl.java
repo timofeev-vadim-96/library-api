@@ -1,18 +1,19 @@
 package com.example.restapi.services.book;
 
+import com.example.restapi.dao.AuthorRepository;
 import com.example.restapi.dao.BookRepository;
+import com.example.restapi.models.appEntities.AuthorEntity;
 import com.example.restapi.models.appEntities.BookEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository dao;
-
-    public BookServiceImpl(BookRepository dao) {
-        this.dao = dao;
-    }
+    private final AuthorRepository authorDao;
 
     @Override
     public BookEntity findById(long id){
@@ -21,7 +22,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookEntity save(BookEntity bookEntity){
-        return dao.save(new BookEntity(bookEntity.getName()));
+        AuthorEntity author = bookEntity.getAuthor();
+        AuthorEntity foundAuthor = authorDao
+                .findFirstByFirstNameAndLastName(author.getFirstName(), author.getLastName());
+
+        if (foundAuthor == null){
+            AuthorEntity returnedAuthor = authorDao.save(author);
+            bookEntity.setAuthor(returnedAuthor);
+        } else {
+            author.setId(foundAuthor.getId());
+        }
+
+        return dao.save(bookEntity);
     }
 
     @Override

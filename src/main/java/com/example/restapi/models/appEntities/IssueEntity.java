@@ -3,6 +3,8 @@ package com.example.restapi.models.appEntities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -14,19 +16,22 @@ public class IssueEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "book_id")
-    private long bookId;
-    @Column(name = "reader_id")
-    private long readerId;
+    @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "book_id")
+    private BookEntity book;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "reader_id")
+    private ReaderEntity reader;
     @Column(name = "issue_at")
     private LocalDateTime issueAt;
     @Column(name = "returned_at")
     private LocalDateTime returnedAt;
 
-
-    public IssueEntity(long bookId, long readerId) {
-        this.bookId = bookId;
-        this.readerId = readerId;
+    public IssueEntity(BookEntity book, ReaderEntity reader) {
+        this.book = book;
+        this.reader = reader;
     }
 
     public void setIssueAt() {

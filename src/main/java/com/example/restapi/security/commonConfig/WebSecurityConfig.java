@@ -1,31 +1,21 @@
 package com.example.restapi.security.commonConfig;
 
-import com.example.restapi.dao.CustomUserDao;
-import com.example.restapi.models.security.CustomUserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.security.sasl.AuthenticationException;
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Profile("security_common")
 public class WebSecurityConfig{
-    private CustomUserDao dao;
 
     /**
      * Бин, позволяющий разграничить доступ в зависимости от прав

@@ -4,12 +4,14 @@ import com.example.restapi.dao.CustomUserDao;
 import com.example.restapi.models.security.CustomUserEntity;
 import com.example.restapi.security.commonConfig.CustomPasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Profile("security_common")
 public class CustomUserDaoInitializer {
     private final CustomUserDao userDao;
     private final CustomPasswordEncoder encoder;

@@ -2,19 +2,16 @@ package com.example.restapi.services.reader;
 
 import com.example.restapi.dao.ReaderRepository;
 import com.example.restapi.models.appEntities.ReaderEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ReaderServiceImpl implements ReaderService {
-    private final String DATA_REGEX = "(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[0-2])[/](19[0-9][0-9]|20[0-9][0-9])";
     private final ReaderRepository dao;
-
-    public ReaderServiceImpl(ReaderRepository dao) {
-        this.dao = dao;
-    }
 
     @Override
     public ReaderEntity findById(long id){

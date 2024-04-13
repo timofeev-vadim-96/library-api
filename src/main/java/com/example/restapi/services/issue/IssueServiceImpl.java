@@ -10,6 +10,7 @@ import com.example.restapi.models.appEntities.ReaderEntity;
 import com.example.restapi.services.book.BookService;
 import com.example.restapi.services.reader.ReaderService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,12 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class IssueServiceImpl implements IssueService {
     private final IssueRepository issueDao;
     private final ReaderService readerService;
     private final BookService bookService;
-    private Environment environment;
+    private final Environment environment;
 
     @Override
     public IssueEntity findById(long id){
@@ -58,7 +59,7 @@ public class IssueServiceImpl implements IssueService {
             throw new TheBookIsBusy(String.format("Книга с id=%d находится на руках у другого читателя.", book.getId()));
         }
 
-        IssueEntity issue = new IssueEntity(issueRequest.getBookId(), issueRequest.getReaderId());
+        IssueEntity issue = new IssueEntity(book, reader);
         issue.setIssueAt();
 
         return issueDao.save(issue);
@@ -76,7 +77,7 @@ public class IssueServiceImpl implements IssueService {
 
     private boolean isTheReaderInDebt(ReaderEntity readerEntity){
         long quantityBooksOnHand = issueDao.findAll().stream()
-                .filter(issue -> issue.getReaderId() == readerEntity.getId() && issue.getReturnedAt() == null)
+                .filter(issue -> issue.getReader().equals(readerEntity) && issue.getReturnedAt() == null)
                 .count();
 
         Integer maxAllowedBooks = environment.getProperty("${application.issue.max-allowed-books:1}", Integer.class);
@@ -93,24 +94,8 @@ public class IssueServiceImpl implements IssueService {
             return null;
         }
         return issueDao.findAll().stream()
-                .filter(issue -> issue.getReaderId() == readerId && issue.getReturnedAt() == null)
+                .filter(issue -> issue.getReader().equals(readerEntity) && issue.getReturnedAt() == null)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<BookEntity> getReaderBooks(long readerId){
-        ReaderEntity readerEntity = readerService.findById(readerId);
-        if (readerEntity == null) {
-            log.info("Запрос на получения списка книг на руках ссылается на не существующего читателя. readerId={}",
-                    readerId);
-            return null;
-        }
-        List<IssueEntity> readersIssues = getReaderIssues(readerId);
-        List<BookEntity> readersBooks = new ArrayList<>(readersIssues.size());
-        for (IssueEntity issue: readersIssues){
-            readersBooks.add(bookService.findById(issue.getBookId()));
-        }
-        return readersBooks;
     }
 
     @Override
@@ -127,7 +112,7 @@ public class IssueServiceImpl implements IssueService {
 
     private boolean isBookBusy(BookEntity bookEntity){
         IssueEntity issueEntity = issueDao.findAll().stream()
-                .filter(iss -> iss.getBookId() == bookEntity.getId())
+                .filter(iss -> iss.getBook().equals(bookEntity))
                 .findFirst()
                 .orElse(null);
         return issueEntity != null;
