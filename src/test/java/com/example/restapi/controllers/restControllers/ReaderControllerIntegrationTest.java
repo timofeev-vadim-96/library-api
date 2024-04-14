@@ -1,4 +1,4 @@
-package com.example.restapi.controllers.restConrollers;
+package com.example.restapi.controllers.restControllers;
 
 import com.example.restapi.controllers.dto.IssueRequest;
 import com.example.restapi.models.appEntities.AuthorEntity;

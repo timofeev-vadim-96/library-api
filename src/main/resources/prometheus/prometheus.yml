@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s #как часто собирать метрики
+
+scrape_configs:
+  - job_name: 'library-api'
+    metrics_path: 'actuator/prometheus' #где брать метрики
+    static_configs:
+      - targets: ['host.docker.internal:8081'] #при запущенных нескольких экземплярах приложения -
+    #можно указать путь ко всем в массиве

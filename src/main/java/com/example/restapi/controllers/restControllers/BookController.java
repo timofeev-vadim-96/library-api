@@ -1,4 +1,4 @@
-package com.example.restapi.controllers.restConrollers;
+package com.example.restapi.controllers.restControllers;
 
 import com.example.restapi.models.appEntities.BookEntity;
 import com.example.restapi.services.book.BookService;

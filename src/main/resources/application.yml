@@ -22,3 +22,19 @@ server:
   error:
     include-message: always
   port: 8081
+
+#spring actuator configuration
+management:
+  endpoint:
+    env:
+      show-values: always
+  endpoints:
+    web:
+      exposure:
+        include: env, prometheus, health, info
+info:
+  app:
+    name: library-api
+    version: 1.0.0
+
+

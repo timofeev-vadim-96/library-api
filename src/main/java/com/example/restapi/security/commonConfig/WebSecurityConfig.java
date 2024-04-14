@@ -29,8 +29,8 @@ public class WebSecurityConfig{
                         .requestMatchers("/ui/issue/**").hasAuthority("manager")
                         .requestMatchers("/ui/reader/**", "/ui/issue/**").hasAuthority("admin") //конкретная роль
                         .requestMatchers("/ui/book/**").authenticated() //любой авторизованный
-                        .requestMatchers("/book/**", "/issue/**", "/reader/**").permitAll() //доступ всем
-                        .anyRequest().denyAll() //для всех остальных ресурсов - запрет всем (необязательно)
+//                        .requestMatchers("/book/**", "/issue/**", "/reader/**").permitAll() //доступ всем
+                        .anyRequest().permitAll() //для всех остальных ресурсов - запрет всем (необязательно)
                 )
                 .formLogin(Customizer.withDefaults()) //если не авторизовались по фильтрам выше - выдать форму авторизации
                 .csrf(AbstractHttpConfigurer::disable)

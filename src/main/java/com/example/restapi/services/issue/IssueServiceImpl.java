@@ -112,7 +112,7 @@ public class IssueServiceImpl implements IssueService {
 
     private boolean isBookBusy(BookEntity bookEntity){
         IssueEntity issueEntity = issueDao.findAll().stream()
-                .filter(iss -> iss.getBook().equals(bookEntity))
+                .filter(iss -> iss.getBook().equals(bookEntity) && iss.getReturnedAt() == null)
                 .findFirst()
                 .orElse(null);
         return issueEntity != null;
